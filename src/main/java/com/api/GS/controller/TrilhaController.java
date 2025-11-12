@@ -1,7 +1,7 @@
 package com.api.GS.controller;
 
 import com.api.GS.dto.TrilhaResponseDTO;
-import com.api.GS.model.trilhas;
+import com.api.GS.model.Trilhas;
 import com.api.GS.service.TrilhaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +18,15 @@ public class TrilhaController {
 
     // Cadastrar nova trilha
     @PostMapping
-    public ResponseEntity<TrilhaResponseDTO> cadastrarTrilha(@RequestBody trilhas novaTrilha) {
-        trilhas criada = trilhasService.cadastrarTrilha(novaTrilha);
+    public ResponseEntity<TrilhaResponseDTO> cadastrarTrilha(@RequestBody Trilhas novaTrilha) {
+        Trilhas criada = trilhasService.cadastrarTrilha(novaTrilha);
         return ResponseEntity.ok(new TrilhaResponseDTO("Trilha cadastrada com sucesso", criada));
     }
 
     // Listar todas as trilhas
     @GetMapping
     public ResponseEntity<TrilhaResponseDTO> listarTrilhas() {
-        List<trilhas> lista = trilhasService.listarTrilhas();
+        List<Trilhas> lista = trilhasService.listarTrilhas();
         return ResponseEntity.ok(new TrilhaResponseDTO("Lista de trilhas obtida com sucesso", lista));
     }
 
@@ -34,14 +34,14 @@ public class TrilhaController {
     @GetMapping("/{id}")
     public ResponseEntity<TrilhaResponseDTO> buscarPorId(@PathVariable int id) {
         return trilhasService.buscarPorId(id)
-                .map(trilha -> ResponseEntity.ok(new TrilhaResponseDTO("Trilha encontrada", trilha)))
+                .map(trilhas -> ResponseEntity.ok(new TrilhaResponseDTO("Trilha encontrada", trilhas)))
                 .orElse(ResponseEntity.status(404).body(new TrilhaResponseDTO("Trilha não encontrada", null)));
     }
 
     // Atualizar trilha
     @PutMapping("/{id}")
-    public ResponseEntity<TrilhaResponseDTO> atualizarTrilha(@PathVariable int id, @RequestBody trilhas trilhaAtualizada) {
-        trilhas atualizada = trilhasService.atualizarTrilha(id, trilhaAtualizada);
+    public ResponseEntity<TrilhaResponseDTO> atualizarTrilha(@PathVariable int id, @RequestBody Trilhas trilhaAtualizada) {
+        Trilhas atualizada = trilhasService.atualizarTrilha(id, trilhaAtualizada);
         if (atualizada == null) {
             return ResponseEntity.status(404).body(new TrilhaResponseDTO("Trilha não encontrada", null));
         }

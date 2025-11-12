@@ -60,7 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             // Log do token (apenas primeiros caracteres para segurança)
-            System.out.println("🔍 Token recebido (primeiros 20 chars): " +
+            System.out.println(" Token recebido (primeiros 20 chars): " +
                     (token.length() > 20 ? token.substring(0, 20) + "..." : token));
 
             // Extrair email do token

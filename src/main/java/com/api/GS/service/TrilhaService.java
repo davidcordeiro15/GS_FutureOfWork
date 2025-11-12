@@ -1,6 +1,6 @@
 package com.api.GS.service;
 
-import com.api.GS.model.trilhas;
+import com.api.GS.model.Trilhas;
 import com.api.GS.repository.TrilhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,31 +14,31 @@ public class TrilhaService {
     @Autowired
     private TrilhaRepository trilhasRepository;
 
-    public trilhas cadastrarTrilha(trilhas novaTrilha) {
+    public Trilhas cadastrarTrilha(Trilhas novaTrilha) {
         return trilhasRepository.save(novaTrilha);
     }
 
-    public List<trilhas> listarTrilhas() {
+    public List<Trilhas> listarTrilhas() {
         return trilhasRepository.findAll();
     }
 
-    public Optional<trilhas> buscarPorId(int id) {
+    public Optional<Trilhas> buscarPorId(int id) {
         return trilhasRepository.findById(id);
     }
 
-    public trilhas atualizarTrilha(int id, trilhas trilhaAtualizada) {
-        Optional<trilhas> existente = trilhasRepository.findById(id);
+    public Trilhas atualizarTrilha(int id, Trilhas trilhaAtualizada) {
+        Optional<Trilhas> existente = trilhasRepository.findById(id);
         if (existente.isEmpty()) {
             return null;
         }
 
-        trilhas trilha = existente.get();
-        trilha.setNome(trilhaAtualizada.getNome());
-        trilha.setConteudo(trilhaAtualizada.getConteudo());
-        trilha.setVideos(trilhaAtualizada.getVideos());
-        trilha.setQuantidadeDeMatriculados(trilhaAtualizada.getQuantidadeDeMatriculados());
+        Trilhas trilhas = existente.get();
+        trilhas.setNome(trilhaAtualizada.getNome());
+        trilhas.setConteudo(trilhaAtualizada.getConteudo());
+        trilhas.setVideos(trilhaAtualizada.getVideos());
+        trilhas.setQuantidadeDeMatriculados(trilhaAtualizada.getQuantidadeDeMatriculados());
 
-        return trilhasRepository.save(trilha);
+        return trilhasRepository.save(trilhas);
     }
 
     public boolean deletarTrilha(int id) {

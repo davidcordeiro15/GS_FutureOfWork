@@ -1,13 +1,11 @@
 package com.api.GS.controller;
 
 import com.api.GS.dto.UserRequestDTO;
-import com.api.GS.model.usuarios;
+import com.api.GS.model.UsuarioGS;
 import com.api.GS.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -23,7 +21,7 @@ public class UserController {
     @PostMapping("/cadastrar")
     public ResponseEntity<?> cadastrarUsuario(@RequestBody UserRequestDTO userDTO) {
         try {
-            usuarios novoUsuario = userService.cadastrarUsuario(userDTO);
+            UsuarioGS novoUsuario = userService.cadastrarUsuario(userDTO);
             return ResponseEntity.ok(novoUsuario);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao cadastrar usuário: " + e.getMessage());
@@ -48,11 +46,11 @@ public class UserController {
      * Atualiza os dados de um usuário existente.
      * O ID deve ser informado na URL e os novos dados no corpo da requisição.
      */
-    @PutMapping("/cadastrar")
+    @PutMapping("/alterar")
     public ResponseEntity<String> alterarUsuario(@RequestBody UserRequestDTO userDTO) {
         try {
             userService.cadastrarUsuario(userDTO);
-            return ResponseEntity.ok("Usuário cadastrado com sucesso!");
+            return ResponseEntity.ok("Usuário alterado com sucesso!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
