@@ -145,9 +145,14 @@ public class TrilhaController {
     }
 
     @PostMapping("/matricular")
-    public ResponseEntity<String> matricularUsuario(
-            @RequestParam String emailUsuario,
-            @RequestParam int idTrilha) {
+    public ResponseEntity<String> matricularUsuario(@RequestBody Map<String, Object> payload) {
+
+        String emailUsuario = (String) payload.get("emailUsuario");
+        Integer idTrilha = (Integer) payload.get("idTrilha");
+
+        if (emailUsuario == null || idTrilha == null) {
+            return ResponseEntity.badRequest().body("{\"erro\": \"Campos obrigatórios: emailUsuario e idTrilha\"}");
+        }
 
         String resultado = trilhasService.matricularUsuarioEmTrilha(emailUsuario, idTrilha);
 
@@ -157,5 +162,6 @@ public class TrilhaController {
             return ResponseEntity.badRequest().body("{\"erro\": \"" + resultado + "\"}");
         }
     }
+
 
 }

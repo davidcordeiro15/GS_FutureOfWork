@@ -502,13 +502,15 @@ POST http://localhost:8083/api/trilhas/deletar/2
 | :--- | :--- | :--- |
 | `POST` | `/api/trilhas/matricular` | Matricula um usuário em uma trilha específica. |
 
-**Parâmetros de Query**
+**Corpo da Requisição (JSON)**
 
-| Parâmetro | Tipo | Obrigatório | Descrição |
-| :--- | :--- | :--- | :--- |
-| `emailUsuario` | `String` | ✅ | Email do usuário a ser matriculado |
-| `idTrilha` | `Integer` | ✅ | ID da trilha desejada |
+```json
+{
+  "emailUsuario": "admin@empresa.com",
+  "idTrilha": 3
+}
 
+```
 **Exemplo de Requisição**
 
 ```
