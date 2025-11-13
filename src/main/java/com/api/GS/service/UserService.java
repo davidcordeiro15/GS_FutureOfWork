@@ -3,6 +3,7 @@ package com.api.GS.service;
 import com.api.GS.dto.UserRequestDTO;
 import com.api.GS.model.UsuarioGS;
 import com.api.GS.repository.UserRepository;
+import com.api.GS.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     /**
      * Cadastra um novo usuário no banco de dados.
@@ -31,7 +34,8 @@ public class UserService {
         novo.setEmail(dto.getEmail());
         novo.setSenha(dto.getSenha());
         novo.setNome(dto.getNome());
-        novo.setEstaTrabalhando(false);
+        novo.setEstaTrabalhando(dto.isEstaTrabalhando());
+        novo.setEadmin(dto.isEadmin());
 
         return userRepository.save(novo);
     }
@@ -44,7 +48,13 @@ public class UserService {
         Optional<UsuarioGS> usuario = userRepository.findByEmail(email);
 
         if (usuario.isPresent() && usuario.get().getSenha().equals(senha)) {
-            return gerarTokenSimples(usuario.get());
+            // Gerar token JWT
+            String token = jwtUtil.generateToken(email);
+
+            System.out.println("✅ Login bem-sucedido para: " + email);
+            System.out.println("🎫 Token gerado com sucesso");
+
+            return token;
         }
 
         return null;

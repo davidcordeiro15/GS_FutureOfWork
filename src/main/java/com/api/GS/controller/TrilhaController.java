@@ -43,7 +43,7 @@ public class TrilhaController {
         Map<String, Object> trilhaData = (Map<String, Object>) payload.get("trilha");
 
         UsuarioGS usuario = autenticar(email, senha);
-        if (!usuario.isAdmin()) {
+        if (!usuario.isEadmin()) {
             return ResponseEntity.status(403)
                     .body(new TrilhaResponseDTO("Apenas administradores podem cadastrar trilhas", null));
         }
@@ -63,13 +63,8 @@ public class TrilhaController {
     /**
      * Listar todas as trilhas (qualquer usuário autenticado pode ver).
      */
-    @PostMapping("/listar")
-    public ResponseEntity<TrilhaResponseDTO> listarTrilhas(@RequestBody Map<String, Object> payload) {
-        String email = (String) payload.get("email");
-        String senha = (String) payload.get("senha");
-
-        autenticar(email, senha);
-
+    @GetMapping("/listar")
+    public ResponseEntity<TrilhaResponseDTO> listarTrilhas() {
         List<Trilhas> lista = trilhasService.listarTrilhas();
         return ResponseEntity.ok(new TrilhaResponseDTO("Lista de trilhas obtida com sucesso", lista));
     }
@@ -105,7 +100,7 @@ public class TrilhaController {
         Map<String, Object> trilhaData = (Map<String, Object>) payload.get("trilha");
 
         UsuarioGS usuario = autenticar(email, senha);
-        if (!usuario.isAdmin()) {
+        if (!usuario.isEadmin()) {
             return ResponseEntity.status(403)
                     .body(new TrilhaResponseDTO("Apenas administradores podem atualizar trilhas", null));
         }
@@ -137,7 +132,7 @@ public class TrilhaController {
         String senha = (String) payload.get("senha");
 
         UsuarioGS usuario = autenticar(email, senha);
-        if (!usuario.isAdmin()) {
+        if (!usuario.isEadmin()) {
             return ResponseEntity.status(403)
                     .body(new TrilhaResponseDTO("Apenas administradores podem deletar trilhas", null));
         }

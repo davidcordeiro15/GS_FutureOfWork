@@ -10,25 +10,23 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "TRILHASGS")
+@Table(name = "USUARIOSGS")
 public class UsuarioGS {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuarios_seq")
-    @SequenceGenerator(name = "usuarios_seq", sequenceName = "USUARIOS_SEQ", allocationSize = 1)
     private int id;
 
+    private String nome;
     private String email;
     private String senha;
-    private String nome;
     @Column(name = "esta_trabalhando")
     private boolean estaTrabalhando;
-    private boolean admin;
+    private boolean eadmin;
 
     @ManyToMany
     @JoinTable(
             name = "usuarios_trilhas",
-            joinColumns = @JoinColumn(name = "id_usuario"),
-            inverseJoinColumns = @JoinColumn(name = "id_trilha")
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "trilha_id")
     )
     private List<Trilhas> trilhasMatriculadas;
 
