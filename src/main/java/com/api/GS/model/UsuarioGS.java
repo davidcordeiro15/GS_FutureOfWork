@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Entity
 @Getter
 @Setter
-@Table(name = "usuariosGS")
+@Table(name = "TRILHASGS")
 public class UsuarioGS {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuarios_seq")
@@ -20,5 +22,14 @@ public class UsuarioGS {
     private String nome;
     @Column(name = "esta_trabalhando")
     private boolean estaTrabalhando;
+    private boolean admin;
+
+    @ManyToMany
+    @JoinTable(
+            name = "usuarios_trilhas",
+            joinColumns = @JoinColumn(name = "id_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "id_trilha")
+    )
+    private List<Trilhas> trilhasMatriculadas;
 
 }

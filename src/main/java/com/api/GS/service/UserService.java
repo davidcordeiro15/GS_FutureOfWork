@@ -53,34 +53,33 @@ public class UserService {
     /**
      * Atualiza os dados de um usuário existente com base no ID.
      */
-    public Optional<UsuarioGS> atualizarUsuario(int id, UserRequestDTO dto) {
-        Optional<UsuarioGS> existente = userRepository.findById(id);
+    public UsuarioGS atualizarPorEmail(UserRequestDTO dto) {
+        UsuarioGS usuario = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o email: " + dto.getEmail()));
 
-        if (existente.isEmpty()) {
-            return Optional.empty();
-        }
+        usuario.setNome(dto.getNome());
+        usuario.setSenha(dto.getSenha());
+        usuario.setEstaTrabalhando(dto.isEstaTrabalhando());
 
-        UsuarioGS usuario = existente.get();
-        if (dto.getNome() != null) usuario.setNome(dto.getNome());
-        if (dto.getEmail() != null) usuario.setEmail(dto.getEmail());
-        if (dto.getSenha() != null) usuario.setSenha(dto.getSenha());
-
-        userRepository.save(usuario);
-        return Optional.of(usuario);
+        return userRepository.save(usuario);
     }
+
 
     /**
-     * Exclui um usuário do banco de dados pelo ID.
+     * Exclui um usuário do banco de dados pelo email.
      * Retorna true se o usuário foi deletado, false caso não exista.
      */
-    public boolean deletarUsuario(int id) {
-        Optional<UsuarioGS> existente = userRepository.findById(id);
-        if (existente.isPresent()) {
-            userRepository.deleteById(id);
+    public boolean deletarUsuarioPorEmail(String email) {
+        Optional<UsuarioGS> usuarioOpt = userRepository.findByEmail(email);
+
+        if (usuarioOpt.isPresent()) {
+            userRepository.delete(usuarioOpt.get());
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
+
 
     /**
      * Gera um token simples baseado em UUID.
@@ -97,5 +96,20 @@ public class UserService {
     private int gerarNovoId() {
         long count = userRepository.count();
         return (int) count + 1;
+    }
+
+    /*
+    * Método para autenticar usuário por email e senha
+    * */
+    public UsuarioGS autenticar(String email, String senha) {
+        Optional<UsuarioGS> usuarioOpt = userRepository.findByEmail(email);
+
+        if (usuarioOpt.isPresent()) {
+            UsuarioGS usuario = usuarioOpt.get();
+            if (usuario.getSenha().equals(senha)) {
+                return usuario;
+            }
+        }
+        return null; // Retorna null se não encontrar ou senha incorreta
     }
 }

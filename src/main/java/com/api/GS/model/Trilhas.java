@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
-@Table(name = "trilhas")
+@Table(name = "TRILHAS")
 public class Trilhas {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trilhas_seq")
@@ -23,4 +25,8 @@ public class Trilhas {
 
     @Column(name = "quantidade_de_matriculados")
     private int quantidadeDeMatriculados;
+
+
+    @ManyToMany(mappedBy = "trilhasMatriculadas")
+    private List<UsuarioGS> usuariosMatriculados;
 }

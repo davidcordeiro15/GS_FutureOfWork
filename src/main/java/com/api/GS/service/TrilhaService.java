@@ -1,7 +1,9 @@
 package com.api.GS.service;
 
 import com.api.GS.model.Trilhas;
+import com.api.GS.model.UsuarioGS;
 import com.api.GS.repository.TrilhaRepository;
+import com.api.GS.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,8 @@ import java.util.Optional;
 
 @Service
 public class TrilhaService {
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private TrilhaRepository trilhasRepository;
@@ -47,5 +51,28 @@ public class TrilhaService {
             return true;
         }
         return false;
+    }
+    public String matricularUsuarioEmTrilha(String emailUsuario, int idTrilha) {
+        Optional<UsuarioGS> usuarioOpt = userRepository.findByEmail(emailUsuario);
+        Optional<Trilhas> trilhaOpt = trilhasRepository.findById(idTrilha);
+
+        if (usuarioOpt.isEmpty() || trilhaOpt.isEmpty()) {
+            return "Usuário ou trilha não encontrados.";
+        }
+
+        UsuarioGS usuario = usuarioOpt.get();
+        Trilhas trilha = trilhaOpt.get();
+
+        if (usuario.getTrilhasMatriculadas().contains(trilha)) {
+            return "Usuário já matriculado nessa trilha.";
+        }
+
+        usuario.getTrilhasMatriculadas().add(trilha);
+        trilha.setQuantidadeDeMatriculados(trilha.getQuantidadeDeMatriculados() + 1);
+
+        userRepository.save(usuario);
+        trilhasRepository.save(trilha);
+
+        return "Usuário matriculado na trilha com sucesso!";
     }
 }

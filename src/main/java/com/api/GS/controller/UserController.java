@@ -15,21 +15,25 @@ public class UserController {
     private UserService userService;
 
     /**
-     * Cadastra um novo usuário no sistema.
-     * Espera um JSON contendo email, senha e nome.
+     * Cadastra um novo usuário e retorna um token de acesso.
      */
     @PostMapping("/cadastrar")
     public ResponseEntity<?> cadastrarUsuario(@RequestBody UserRequestDTO userDTO) {
         try {
             UsuarioGS novoUsuario = userService.cadastrarUsuario(userDTO);
-            return ResponseEntity.ok(novoUsuario);
+
+            // Gera token automaticamente após cadastro
+            String token = userService.loginComToken(userDTO.getEmail(), userDTO.getSenha());
+
+            return ResponseEntity.ok()
+                    .body("{\"mensagem\": \"Usuário cadastrado com sucesso.\", \"token\": \"" + token + "\"}");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Erro ao cadastrar usuário: " + e.getMessage());
+            return ResponseEntity.badRequest().body("{\"erro\": \"" + e.getMessage() + "\"}");
         }
     }
 
     /**
-     * Realiza o login do usuário e retorna um token (ou mensagem de erro).
+     * Realiza o login do usuário e retorna um token JWT.
      */
     @PostMapping("/login")
     public ResponseEntity<?> logarNaConta(@RequestBody UserRequestDTO user) {
@@ -43,30 +47,30 @@ public class UserController {
     }
 
     /**
-     * Atualiza os dados de um usuário existente.
-     * O ID deve ser informado na URL e os novos dados no corpo da requisição.
+     * Atualiza os dados de um usuário com base no email.
+     * O corpo da requisição deve conter o email e os novos dados.
      */
     @PutMapping("/alterar")
-    public ResponseEntity<String> alterarUsuario(@RequestBody UserRequestDTO userDTO) {
+    public ResponseEntity<?> alterarUsuario(@RequestBody UserRequestDTO userDTO) {
         try {
-            userService.cadastrarUsuario(userDTO);
-            return ResponseEntity.ok("Usuário alterado com sucesso!");
+            UsuarioGS usuarioAtualizado = userService.atualizarPorEmail(userDTO);
+            return ResponseEntity.ok(usuarioAtualizado);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
+            return ResponseEntity.badRequest().body("{\"erro\": \"" + e.getMessage() + "\"}");
         }
     }
-
 
     /**
      * Exclui um usuário com base no ID.
      */
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<?> deletarUsuario(@PathVariable int id) {
-        boolean deletado = userService.deletarUsuario(id);
+    @DeleteMapping("/deletar/{email}")
+    public ResponseEntity<?> deletarUsuario(@PathVariable String email) {
+        boolean deletado = userService.deletarUsuarioPorEmail(email);
         if (deletado) {
-            return ResponseEntity.ok("Usuário deletado com sucesso.");
+            return ResponseEntity.ok("{\"mensagem\": \"Usuário deletado com sucesso.\"}");
         } else {
-            return ResponseEntity.status(404).body("Usuário não encontrado.");
+            return ResponseEntity.status(404).body("{\"erro\": \"Usuário não encontrado.\"}");
         }
     }
+
 }
