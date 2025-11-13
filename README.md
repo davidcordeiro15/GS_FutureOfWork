@@ -290,8 +290,8 @@ Todos os endpoints retornam dados em formato JSON e seguem o padrão RESTful. **
 
 ```json
 {
-  "email": "admin@teste.com",
-  "senha": "admin123",
+  "email": "admin@empresa.com",
+  "senha": "teste123",
   "trilha": {
     "nome": "Trilha Java Spring Boot",
     "conteudo": "Aprenda desenvolvimento backend com Spring Boot e PostgreSQL.",
@@ -371,8 +371,8 @@ Todos os endpoints retornam dados em formato JSON e seguem o padrão RESTful. **
 
 ```json
 {
-  "email": "usuario@teste.com",
-  "senha": "123456"
+  "email": "admin@empresa.com",
+  "senha": "teste123"
 }
 ```
 
@@ -415,8 +415,8 @@ POST http://localhost:8083/api/trilhas/buscar/1
 
 ```json
 {
-  "email": "admin@teste.com",
-  "senha": "admin123",
+  "email": "admin@empresa.com",
+  "senha": "teste123",
   "trilha": {
     "nome": "Trilha Java Avançada",
     "conteudo": "Conteúdo atualizado com novos tópicos de Spring Security.",
@@ -467,8 +467,8 @@ POST http://localhost:8083/api/trilhas/buscar/1
 
 ```json
 {
-  "email": "admin@teste.com",
-  "senha": "admin123"
+  "email": "admin@empresa.com",
+  "senha": "teste123"
 }
 ```
 
